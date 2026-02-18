@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transitional Expressions Trainer</title>
+  <style>
+    :root{
+      --bg:#fbfbfa; --card:#fff; --ink:#1f1f1f; --muted:#5a5550; --border:#e7e2dd;
+      --a:#eef5ff; --aInk:#2f5b95;
+      --b:#f4f1ff; --bInk:#5a44a6;
+      --c:#fff3e8; --cInk:#8a4b1f;
+      --good:#156b3b; --bad:#8f1f1f;
+      --shadow:0 10px 28px rgba(0,0,0,0.06);
+      --r:18px;
+    }
+
+    body{ margin:0; background:var(--bg); color:var(--ink);
+      font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+      line-height:1.6; font-size:16.5px; }
+
+    .wrap{ max-width:980px; margin:0 auto; padding:22px 18px 44px; }
+    .top,.panel{ background:var(--card); border:1px solid var(--border);
+      border-radius:var(--r); box-shadow:var(--shadow); }
+
+    .top{ padding:18px 20px; }
+    .k{ font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase;
+      color:var(--muted); margin:0 0 6px 0; }
+    h1{ margin:0; font-size:22px; font-weight:760; }
+    .sub{ margin-top:8px; color:var(--muted); max-width:90ch; }
+
+    .grid{ display:grid; grid-template-columns:1.2fr 0.8fr; gap:16px; margin-top:16px; }
+    @media (max-width:900px){ .grid{ grid-template-columns:1fr; } }
+
+    .panel{ padding:18px 20px; }
+    .t{ font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; margin:0 0 12px 0; }
+
+    .levels{ display:flex; gap:10px; flex-wrap:wrap; }
+    .lvl{ border:1px solid var(--border); background:#fff; border-radius:999px;
+      padding:10px 14px; font-weight:760; cursor:pointer; min-width:160px; text-align:center; }
+    .lvl[aria-pressed="true"]{ outline:3px solid rgba(0,0,0,0.07); }
+    .lvl:disabled{ opacity:0.55; cursor:not-allowed; }
+
+    .pill{ display:inline-block; border-radius:999px; padding:6px 10px; font-size:13.5px;
+      border:1px solid var(--border); background:#fff; color:var(--muted); margin:8px 8px 0 0; }
+
+    .switch{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+    .switch input{ transform:scale(1.1); }
+
+    .tiny{ font-size:14.5px; color:var(--muted); margin-top:8px; }
+
+    .exercise{ margin-top:16px; border-radius:var(--r); border:1px solid var(--border);
+      overflow:hidden; background:#fff; box-shadow:var(--shadow); }
+
+    .hdr{ padding:14px 16px; }
+    .hdrA{ background:var(--a); color:var(--aInk); }
+    .hdrB{ background:var(--b); color:var(--bInk); }
+    .hdrC{ background:var(--c); color:var(--cInk); }
+
+    .hdrTitle{ font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; font-weight:850; margin:0 0 6px 0; }
+    .hdrSub{ font-weight:720; }
+
+    .body{ padding:16px 16px 18px; }
+    .prompt{ font-size:18px; font-weight:760; margin:0 0 12px 0; }
+    .context{ color:#2b2927; background:#fbfbfa; border:1px solid var(--border);
+      border-radius:14px; padding:12px 12px; margin:10px 0 12px 0; }
+
+    .choices{ display:grid; gap:10px; margin-top:10px; }
+    .choice{ border:1px solid var(--border); border-radius:14px; padding:12px 12px;
+      cursor:pointer; background:#fff; display:flex; gap:10px; align-items:flex-start; }
+    .choice input{ margin-top:3px; transform:scale(1.2); }
+
+    .controls{ margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; }
+    .btn{ border:1px solid var(--border); background:#fff; border-radius:12px;
+      padding:10px 14px; font-weight:760; cursor:pointer; min-width:140px; }
+    .primary{ background:#111; color:#fff; border-color:#111; }
+    .btn:disabled{ opacity:0.6; cursor:not-allowed; }
+
+    .fb{ margin-top:14px; border-radius:14px; padding:12px 12px;
+      border:1px solid var(--border); background:#fbfbfa; display:none; }
+
+    .fbTitle{ margin:0 0 8px 0; font-weight:900; letter-spacing:0.2px; }
+    .good{ color:var(--good); } .bad{ color:var(--bad); }
+
+    .fbBlock{ background:#fff; border:1px solid var(--border); border-radius:12px;
+      padding:10px 12px; margin-top:10px; }
+    .fbLabel{ font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin:0 0 6px 0; }
+    .fbText{ margin:0; }
+
+    .teacher{ margin-top:10px; color:var(--muted); font-size:14px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <p class="k">BUSN 2100 · Transitional Expressions Practice</p>
+      <h1>Transitional Expressions Trainer. Retry until correct ✨</h1>
+      <div class="sub">
+        You will choose the transition that best matches the relationship between ideas.
+        If you choose wrong, you will get a hint and you can try again. You only move on after you get it correct.
+        Unlock the next level after <strong>6 correct</strong> at the current level.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <p class="t">Choose a level</p>
+        <div class="levels">
+          <button id="l1" class="lvl" aria-pressed="true">Level 1. Identify the link</button>
+          <button id="l2" class="lvl" aria-pressed="false" disabled>Level 2. Stronger nuance</button>
+          <button id="l3" class="lvl" aria-pressed="false" disabled>Level 3. Editorial precision</button>
+        </div>
+
+        <div>
+          <span id="pillLevel" class="pill">Current level: Level 1</span>
+          <span id="pillScore" class="pill">Correct at this level: 0</span>
+          <span class="pill">Unlock rule: 6 correct</span>
+        </div>
+
+        <div class="switch">
+          <input id="teacherMode" type="checkbox" />
+          <label for="teacherMode"><strong>Teacher Mode</strong> shows concept tags</label>
+        </div>
+
+        <div class="tiny" id="unlockNote">Level 2 unlocks after 6 correct in Level 1.</div>
+      </div>
+
+      <div class="panel">
+        <p class="t">Relationships to notice</p>
+        <div class="tiny"><strong>Contrast</strong> (expectation vs reality), <strong>cause and effect</strong>, <strong>reason</strong>, <strong>response</strong>, <strong>sequence</strong>.</div>
+        <div class="tiny">A good transition is not just vocabulary. It is logic.</div>
+      </div>
+    </div>
+
+    <div class="exercise">
+      <div id="hdr" class="hdr hdrA">
+        <div id="hdrTitle" class="hdrTitle">Level 1</div>
+        <div id="hdrSub" class="hdrSub">Pick the transition that matches the relationship</div>
+      </div>
+
+      <div class="body">
+        <p id="prompt" class="prompt">Loading…</p>
+        <div id="context" class="context" style="display:none;"></div>
+
+        <fieldset class="choices" id="choices">
+          <legend style="position:absolute;left:-9999px;">Answer choices</legend>
+        </fieldset>
+
+        <div class="controls">
+          <button id="check" class="btn primary" disabled>Check</button>
+          <button id="next" class="btn" disabled>Next question</button>
+          <button id="newBtn" class="btn">New random question</button>
+        </div>
+
+        <div id="fb" class="fb">
+          <div id="fbTitle" class="fbTitle"></div>
+
+          <div class="fbBlock" id="fbHintWrap" style="display:none;">
+            <div class="fbLabel">Hint</div>
+            <p id="fbHint" class="fbText"></p>
+          </div>
+
+          <div class="fbBlock" id="fbCorrectWrap" style="display:none;">
+            <div class="fbLabel">Correct answer</div>
+            <p id="fbCorrect" class="fbText"></p>
+          </div>
+
+          <div class="fbBlock" id="fbWhyWrap" style="display:none;">
+            <div class="fbLabel">Why this is correct</div>
+            <p id="fbWhy" class="fbText"></p>
+          </div>
+
+          <div class="fbBlock" id="fbWrongWrap" style="display:none;">
+            <div class="fbLabel">Why your choice does not fit</div>
+            <p id="fbWrong" class="fbText"></p>
+          </div>
+
+          <div id="teacherInfo" class="teacher" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const LEVELS = {
+    1: { name:"Level 1", hdr:"hdrA", title:"Level 1", sub:"Pick the transition that matches the relationship" },
+    2: { name:"Level 2", hdr:"hdrB", title:"Level 2", sub:"Choose transitions that match nuance and tone" },
+    3: { name:"Level 3", hdr:"hdrC", title:"Level 3", sub:"Choose transitions that create editorial flow" }
+  };
+
+  /*
+    Question fields:
+    - level
+    - prompt: sentence with blank
+    - context: optional scenario paragraph
+    - choices: 4 options
+    - correctIndex
+    - correctWhy: HTML allowed for strategic bolding
+    - wrongWhy: array of 4 short explanations, only shown for the selected wrong option
+    - hint: array of 4 hint lines, only shown for the selected wrong option
+    - conceptTag
+  */
+  const QUESTIONS = [
+    // Level 1. Marketing campaign
+    {
+      id:"L1-01", level:1,
+      prompt:"Choose the best transition for the blank.",
+      context:"The new marketing campaign launched last week. ____ sales figures have not increased.",
+      choices:["Consequently","However","For example","Meanwhile"],
+      correctIndex:1,
+      correctWhy:"<strong>However</strong> signals <strong>contrast</strong>. Launching a campaign suggests improvement, but the results did not match expectations.",
+      wrongWhy:[
+        "<strong>Consequently</strong> signals cause and effect, not contrast.",
+        "",
+        "<strong>For example</strong> introduces an example, not a shift in expectation.",
+        "<strong>Meanwhile</strong> signals parallel timing, not contrast."
+      ],
+      hint:[
+        "Ask: is this cause and effect, or expectation vs reality?",
+        "",
+        "Ask: are you giving an example, or changing direction?",
+        "Ask: are these two events happening at the same time, or is one surprising?"
+      ],
+      conceptTag:"Contrast"
+    },
+    {
+      id:"L1-02", level:1,
+      prompt:"Choose the best transition for the blank.",
+      context:"Sales figures did not increase. This is surprising ____ the campaign was expected to boost sales.",
+      choices:["given that","in response","as a result","for instance"],
+      correctIndex:0,
+      correctWhy:"<strong>Given that</strong> introduces a <strong>reason</strong>. It explains why the situation is surprising.",
+      wrongWhy:[
+        "",
+        "<strong>In response</strong> signals action taken after a problem, not the reason the problem is surprising.",
+        "<strong>As a result</strong> signals an outcome, not a reason.",
+        "<strong>For instance</strong> introduces an example, not a reason."
+      ],
+      hint:[
+        "",
+        "Ask: is this explaining why something is surprising, or describing what the team did next?",
+        "Ask: are you describing an outcome, or explaining why the statement is surprising?",
+        "Ask: are you giving an example, or giving a reason?"
+      ],
+      conceptTag:"Reason"
+    },
+    {
+      id:"L1-03", level:1,
+      prompt:"Choose the best transition for the blank.",
+      context:"____ the team spent time planning and did consumer surveys, the sales lift did not happen.",
+      choices:["Despite","Therefore","For example","Similarly"],
+      correctIndex:0,
+      correctWhy:"<strong>Despite</strong> signals <strong>contrast</strong> between effort and outcome.",
+      wrongWhy:[
+        "",
+        "<strong>Therefore</strong> signals a logical conclusion, not contrast.",
+        "<strong>For example</strong> introduces an example, not a contrast.",
+        "<strong>Similarly</strong> compares two similar ideas, not effort versus outcome."
+      ],
+      hint:[
+        "",
+        "Ask: are you contrasting effort with outcome, or drawing a conclusion?",
+        "Ask: is the next clause an example, or a surprising result?",
+        "Ask: are the two clauses similar, or in tension?"
+      ],
+      conceptTag:"Contrast despite"
+    },
+    {
+      id:"L1-04", level:1,
+      prompt:"Choose the best transition for the blank.",
+      context:"Sales have not increased. ____ the sales department is reviewing the strategy.",
+      choices:["Consequently","For example","However","In contrast"],
+      correctIndex:0,
+      correctWhy:"<strong>Consequently</strong> signals <strong>cause and effect</strong>. The lack of results triggers a review.",
+      wrongWhy:[
+        "",
+        "<strong>For example</strong> would introduce a specific example of something, not an action taken.",
+        "<strong>However</strong> signals contrast, not an effect.",
+        "<strong>In contrast</strong> sets up a comparison, not a result."
+      ],
+      hint:[
+        "",
+        "Ask: are you giving an example, or describing the next action caused by the problem?",
+        "Ask: is the second sentence a surprise, or a response to the first?",
+        "Ask: are you comparing two things, or showing the result of the first?"
+      ],
+      conceptTag:"Cause and effect"
+    },
+
+    // Level 1. Financial downturn paragraph
+    {
+      id:"L1-05", level:1,
+      prompt:"Choose the best transition for the blank.",
+      context:"The company has seen better days financially, ____ a significant drop in revenue last quarter.",
+      choices:["as a result","evidenced by","however","for example"],
+      correctIndex:1,
+      correctWhy:"<strong>Evidenced by</strong> introduces <strong>supporting evidence</strong> for the claim.",
+      wrongWhy:[
+        "<strong>As a result</strong> signals an outcome, not evidence supporting the statement.",
+        "",
+        "<strong>However</strong> signals contrast, not evidence.",
+        "<strong>For example</strong> can introduce an example, but <strong>evidenced by</strong> is tighter for proof."
+      ],
+      hint:[
+        "Ask: are you showing proof, or a consequence?",
+        "",
+        "Ask: is the next phrase proof, or a surprising contrast?",
+        "Ask: is this a general example, or a direct piece of evidence?"
+      ],
+      conceptTag:"Evidence"
+    },
+    {
+      id:"L1-06", level:1,
+      prompt:"Choose the best transition for the blank.",
+      context:"This downturn can be attributed to new competitors entering the market, ____ strategies that were once effective are now outdated.",
+      choices:["which means","for instance","despite","however"],
+      correctIndex:0,
+      correctWhy:"<strong>Which means</strong> explains a <strong>consequence</strong> of the cause just mentioned.",
+      wrongWhy:[
+        "",
+        "<strong>For instance</strong> introduces an example, not the consequence.",
+        "<strong>Despite</strong> signals contrast, not explanation of consequence.",
+        "<strong>However</strong> signals contrast, not consequence."
+      ],
+      hint:[
+        "",
+        "Ask: are you explaining what follows from the cause, or giving an example?",
+        "Ask: is the second clause in tension with the first, or derived from it?",
+        "Ask: is this a surprise contrast, or a result of the cause?"
+      ],
+      conceptTag:"Consequence explanation"
+    },
+
+    // Level 2. Stronger nuance
+    {
+      id:"L2-01", level:2,
+      prompt:"Choose the best transition for the blank.",
+      context:"The team ran multiple focus groups; ____ the message still missed the target audience.",
+      choices:["however","for example","in response","as a result"],
+      correctIndex:0,
+      correctWhy:"<strong>However</strong> is best because it signals <strong>expectation vs reality</strong>. Effort happened, outcome disappointed.",
+      wrongWhy:[
+        "",
+        "<strong>For example</strong> would introduce a specific example of the focus groups, not a surprising outcome.",
+        "<strong>In response</strong> signals an action taken after a problem, not a contrast.",
+        "<strong>As a result</strong> suggests the miss happened because of the focus groups, which is illogical."
+      ],
+      hint:[
+        "",
+        "Ask: is the second clause an example, or a surprise outcome?",
+        "Ask: is this describing what they did next, or a contrast?",
+        "Ask: is the second clause caused by the first, or in tension with it?"
+      ],
+      conceptTag:"Contrast after effort"
+    },
+    {
+      id:"L2-02", level:2,
+      prompt:"Choose the best transition for the blank.",
+      context:"The company will revamp its marketing approach. ____ employees are anxious about the changes.",
+      choices:["As a result","For example","Despite","Given that"],
+      correctIndex:0,
+      correctWhy:"<strong>As a result</strong> signals <strong>effect</strong>. The planned changes lead to employee anxiety.",
+      wrongWhy:[
+        "",
+        "<strong>For example</strong> introduces an example, not an effect.",
+        "<strong>Despite</strong> signals contrast, not effect.",
+        "<strong>Given that</strong> introduces a reason, not the outcome."
+      ],
+      hint:[
+        "",
+        "Ask: is the second sentence an example, or the consequence?",
+        "Ask: is employee anxiety a contrast to the plan, or a result of it?",
+        "Ask: are you giving a reason, or describing what happened because of the plan?"
+      ],
+      conceptTag:"Effect"
+    },
+
+    // Level 3. Editorial precision
+    {
+      id:"L3-01", level:3,
+      prompt:"Choose the best transition for the blank.",
+      context:"The campaign looked strong on paper. ____ the rollout underperformed in the first week, the team is revising the call to action.",
+      choices:["Because","Although","For example","Similarly"],
+      correctIndex:1,
+      correctWhy:"<strong>Although</strong> signals a sophisticated <strong>contrast</strong> and sets up a clear pivot to action.",
+      wrongWhy:[
+        "<strong>Because</strong> turns the underperformance into the reason the campaign looked strong, which reverses logic.",
+        "",
+        "<strong>For example</strong> introduces an example, not a contrast clause.",
+        "<strong>Similarly</strong> signals similarity, not contrast."
+      ],
+      hint:[
+        "Ask: are you building a contrast clause, or stating a reason?",
+        "",
+        "Ask: does the blank introduce an example, or an opposing reality?",
+        "Ask: are the two ideas similar, or in tension?"
+      ],
+      conceptTag:"Contrast clause"
+    }
+  ];
+
+  const els = {
+    l1:document.getElementById("l1"),
+    l2:document.getElementById("l2"),
+    l3:document.getElementById("l3"),
+    pillLevel:document.getElementById("pillLevel"),
+    pillScore:document.getElementById("pillScore"),
+    unlockNote:document.getElementById("unlockNote"),
+    teacherMode:document.getElementById("teacherMode"),
+    hdr:document.getElementById("hdr"),
+    hdrTitle:document.getElementById("hdrTitle"),
+    hdrSub:document.getElementById("hdrSub"),
+    prompt:document.getElementById("prompt"),
+    context:document.getElementById("context"),
+    choices:document.getElementById("choices"),
+    check:document.getElementById("check"),
+    next:document.getElementById("next"),
+    newBtn:document.getElementById("newBtn"),
+    fb:document.getElementById("fb"),
+    fbTitle:document.getElementById("fbTitle"),
+    fbHintWrap:document.getElementById("fbHintWrap"),
+    fbHint:document.getElementById("fbHint"),
+    fbCorrectWrap:document.getElementById("fbCorrectWrap"),
+    fbCorrect:document.getElementById("fbCorrect"),
+    fbWhyWrap:document.getElementById("fbWhyWrap"),
+    fbWhy:document.getElementById("fbWhy"),
+    fbWrongWrap:document.getElementById("fbWrongWrap"),
+    fbWrong:document.getElementById("fbWrong"),
+    teacherInfo:document.getElementById("teacherInfo")
+  };
+
+  let currentLevel = 1;
+  let currentQ = null;
+  let selected = null;
+
+  let unlocked = {1:true,2:false,3:false};
+  let correctCount = {1:0,2:0,3:0};
+
+  // No repeat until pool exhausted
+  let remaining = {1:[],2:[],3:[]};
+
+  function escapeHtml(str){
+    return str.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+  }
+
+  function initRemaining(){
+    [1,2,3].forEach(lvl => {
+      remaining[lvl] = QUESTIONS.filter(q => q.level === lvl).map(q => q.id);
+      shuffle(remaining[lvl]);
+    });
+  }
+
+  function shuffle(arr){
+    for(let i=arr.length-1; i>0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  function getNextQuestionForLevel(lvl){
+    if(remaining[lvl].length === 0){
+      remaining[lvl] = QUESTIONS.filter(q => q.level === lvl).map(q => q.id);
+      shuffle(remaining[lvl]);
+    }
+    const id = remaining[lvl].pop();
+    return QUESTIONS.find(q => q.id === id);
+  }
+
+  function refreshUnlockUI(){
+    els.l2.disabled = !unlocked[2];
+    els.l3.disabled = !unlocked[3];
+
+    let msg = "";
+    if(!unlocked[2]) msg = "Level 2 unlocks after 6 correct in Level 1.";
+    if(unlocked[2] && !unlocked[3]) msg = "Level 3 unlocks after 6 correct in Level 2.";
+    if(unlocked[3]) msg = "All levels unlocked. Keep going for mastery.";
+    els.unlockNote.textContent = msg;
+  }
+
+  function setLevel(lvl){
+    currentLevel = lvl;
+
+    els.l1.setAttribute("aria-pressed", lvl===1 ? "true":"false");
+    els.l2.setAttribute("aria-pressed", lvl===2 ? "true":"false");
+    els.l3.setAttribute("aria-pressed", lvl===3 ? "true":"false");
+
+    els.pillLevel.textContent = "Current level: " + LEVELS[lvl].name;
+    els.pillScore.textContent = "Correct at this level: " + correctCount[lvl];
+
+    els.hdr.className = "hdr " + LEVELS[lvl].hdr;
+    els.hdrTitle.textContent = LEVELS[lvl].title;
+    els.hdrSub.textContent = LEVELS[lvl].sub;
+
+    loadQuestion();
+  }
+
+  function resetFeedback(){
+    els.fb.style.display = "none";
+    els.fbTitle.textContent = "";
+
+    els.fbHintWrap.style.display = "none";
+    els.fbHint.textContent = "";
+
+    els.fbCorrectWrap.style.display = "none";
+    els.fbCorrect.textContent = "";
+
+    els.fbWhyWrap.style.display = "none";
+    els.fbWhy.innerHTML = "";
+
+    els.fbWrongWrap.style.display = "none";
+    els.fbWrong.innerHTML = "";
+
+    els.teacherInfo.style.display = "none";
+    els.teacherInfo.textContent = "";
+  }
+
+  function loadQuestion(){
+    selected = null;
+    currentQ = getNextQuestionForLevel(currentLevel);
+
+    resetFeedback();
+
+    els.prompt.textContent = currentQ.prompt;
+
+    if(currentQ.context){
+      els.context.style.display = "block";
+      els.context.textContent = currentQ.context;
+    } else {
+      els.context.style.display = "none";
+      els.context.textContent = "";
+    }
+
+    els.choices.innerHTML = '<legend style="position:absolute;left:-9999px;">Answer choices</legend>';
+
+    currentQ.choices.forEach((txt, idx) => {
+      const label = document.createElement("label");
+      label.className = "choice";
+      label.innerHTML = `
+        <input type="radio" name="choice" value="${idx}" />
+        <div>${escapeHtml(txt)}</div>
+      `;
+      label.addEventListener("click", () => {
+        selected = idx;
+        els.check.disabled = false;
+      });
+      els.choices.appendChild(label);
+    });
+
+    els.check.disabled = true;
+    els.next.disabled = true;
+  }
+
+  function showHintForWrongChoice(idx){
+    els.fb.style.display = "block";
+    els.fbTitle.textContent = "Not quite yet. Try again.";
+    els.fbTitle.className = "fbTitle bad";
+
+    els.fbHintWrap.style.display = "block";
+    els.fbHint.textContent = currentQ.hint && currentQ.hint[idx]
+      ? currentQ.hint[idx]
+      : "Hint: identify the relationship first. Contrast, cause and effect, reason, or response.";
+
+    els.fbWrongWrap.style.display = "block";
+    const msg = (currentQ.wrongWhy && currentQ.wrongWhy[idx]) ? currentQ.wrongWhy[idx] : "That option signals a different relationship than the sentence needs.";
+    els.fbWrong.innerHTML = "<strong>Option " + (idx+1) + ".</strong> " + msg;
+
+    if(els.teacherMode.checked){
+      els.teacherInfo.style.display = "block";
+      els.teacherInfo.textContent = "Concept tag: " + currentQ.conceptTag;
+    }
+  }
+
+  function showCorrect(){
+    els.fb.style.display = "block";
+    els.fbTitle.textContent = "Correct ✅";
+    els.fbTitle.className = "fbTitle good";
+
+    els.fbCorrectWrap.style.display = "block";
+    els.fbCorrect.textContent = "Option " + (currentQ.correctIndex+1) + ". " + currentQ.choices[currentQ.correctIndex];
+
+    els.fbWhyWrap.style.display = "block";
+    els.fbWhy.innerHTML = currentQ.correctWhy || "<strong>Why</strong>: This transition matches the relationship between the ideas.";
+
+    if(els.teacherMode.checked){
+      els.teacherInfo.style.display = "block";
+      els.teacherInfo.textContent = "Concept tag: " + currentQ.conceptTag;
+    }
+  }
+
+  els.check.addEventListener("click", () => {
+    if(selected === null) return;
+
+    const isCorrect = selected === currentQ.correctIndex;
+
+    if(isCorrect){
+      correctCount[currentLevel] += 1;
+      els.pillScore.textContent = "Correct at this level: " + correctCount[currentLevel];
+
+      if(currentLevel === 1 && correctCount[1] >= 6) unlocked[2] = true;
+      if(currentLevel === 2 && correctCount[2] >= 6) unlocked[3] = true;
+      refreshUnlockUI();
+
+      showCorrect();
+
+      els.next.disabled = false;
+      els.check.disabled = true;
+
+      const radios = document.querySelectorAll('input[name="choice"]');
+      radios.forEach(r => r.disabled = true);
+
+    } else {
+      showHintForWrongChoice(selected);
+      els.next.disabled = true;
+      els.check.disabled = false;
+    }
+  });
+
+  els.next.addEventListener("click", () => loadQuestion());
+  els.newBtn.addEventListener("click", () => loadQuestion());
+
+  els.teacherMode.addEventListener("change", () => {
+    if(els.fb.style.display !== "none"){
+      if(els.teacherMode.checked){
+        els.teacherInfo.style.display = "block";
+        els.teacherInfo.textContent = "Concept tag: " + currentQ.conceptTag;
+      } else {
+        els.teacherInfo.style.display = "none";
+        els.teacherInfo.textContent = "";
+      }
+    }
+  });
+
+  els.l1.addEventListener("click", ()=> setLevel(1));
+  els.l2.addEventListener("click", ()=> { if(unlocked[2]) setLevel(2); });
+  els.l3.addEventListener("click", ()=> { if(unlocked[3]) setLevel(3); });
+
+  initRemaining();
+  refreshUnlockUI();
+  setLevel(1);
+</script>
+</body>
+</html>
